@@ -73,8 +73,6 @@ fn parse_builtin_config(name: &str) -> Result<BuiltinConfig, String> {
         "tw2t" => Ok(BuiltinConfig::Tw2t),
         "t2hk" => Ok(BuiltinConfig::T2hk),
         "hk2t" => Ok(BuiltinConfig::Hk2t),
-        "t2jp" => Ok(BuiltinConfig::T2jp),
-        "jp2t" => Ok(BuiltinConfig::Jp2t),
         _ => Err(format!("不支援的 OpenCC 模式: {name}")),
     }
 }
