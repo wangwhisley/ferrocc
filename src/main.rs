@@ -5,7 +5,7 @@ use std::path::{Component, Path, PathBuf};
 use std::thread;
 use std::time::{Duration, SystemTime};
 
-use chardetng::EncodingDetector;
+use chardetng::{EncodingDetector, Iso2022JpDetection, Utf8Detection};
 use ferrous_opencc::config::BuiltinConfig;
 use ferrous_opencc::OpenCC;
 use regex::Regex;
@@ -185,9 +185,9 @@ fn decode_bytes(raw: &[u8]) -> String {
     if let Ok(s) = std::str::from_utf8(raw) {
         return s.to_string();
     }
-    let mut detector = EncodingDetector::new();
+    let mut detector = EncodingDetector::new(Iso2022JpDetection::Allow);
     detector.feed(raw, true);
-    let encoding = detector.guess(None, true);
+    let encoding = detector.guess(None, Utf8Detection::Allow);
     let (decoded, _, _) = encoding.decode(raw);
     decoded.into_owned()
 }
@@ -242,7 +242,7 @@ fn convert_epub_io<R: Read + Seek, W: Write + Seek>(
 
     for i in 0..zin.len() {
         let mut entry = zin.by_index(i)?;
-        let name = entry.name().to_string();
+        let name = entry.name()?.into_owned();
         if name == "mimetype" {
             continue;
         }
@@ -569,7 +569,7 @@ mod tests {
 
         {
             let mut first = zin.by_index(0).unwrap();
-            assert_eq!(first.name(), "mimetype");
+            assert_eq!(first.name().unwrap(), "mimetype");
             assert_eq!(first.compression(), CompressionMethod::Stored);
             let mut content = String::new();
             first.read_to_string(&mut content).unwrap();
