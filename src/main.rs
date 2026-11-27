@@ -534,10 +534,8 @@ mod tests {
                 SimpleFileOptions::default().compression_method(CompressionMethod::Stored);
 
             zw.start_file("OEBPS/content.opf", deflated).unwrap();
-            zw.write_all(
-                br#"<package><metadata><dc:title>软件测试指南</dc:title><dc:language>zh-CN</dc:language></metadata></package>"#,
-            )
-            .unwrap();
+            let opf_xml = "<package><metadata><dc:title>软件测试指南</dc:title><dc:language>zh-CN</dc:language></metadata></package>";
+            zw.write_all(opf_xml.as_bytes()).unwrap();
 
             zw.start_file("OEBPS/ch1.xhtml", deflated).unwrap();
             zw.write_all("<html><body>这是一本软件测试电子书。</body></html>".as_bytes())
