@@ -91,9 +91,12 @@ struct ConfigManager {
 impl ConfigManager {
     fn new(path: &str) -> Self {
         let cfg = AppConfig::default();
-        let converter =
-            OpenCC::from_config(BuiltinConfig::S2twp).expect("初始化預設 OpenCC 失敗");
-        let text_exts = cfg.text_extensions.iter().map(|s| s.to_lowercase()).collect();
+        let converter = OpenCC::from_config(BuiltinConfig::S2twp).expect("初始化預設 OpenCC 失敗");
+        let text_exts = cfg
+            .text_extensions
+            .iter()
+            .map(|s| s.to_lowercase())
+            .collect();
         let ignore_names = cfg.ignore_names.iter().cloned().collect();
 
         let mut mgr = Self {
@@ -264,7 +267,9 @@ fn convert_epub_io<R: Read + Seek, W: Write + Seek>(
             let text = decode_bytes(&buf);
             let mut converted = mgr.converter.convert(&text);
             if is_to_tw && ext == ".opf" {
-                converted = lang_re.replace_all(&converted, "${1}zh-TW${3}").into_owned();
+                converted = lang_re
+                    .replace_all(&converted, "${1}zh-TW${3}")
+                    .into_owned();
             }
             let opts = SimpleFileOptions::default().compression_method(CompressionMethod::Deflated);
             zout.start_file(&name, opts)?;
@@ -333,7 +338,11 @@ fn write_error_log(
 }
 
 fn cleanup_empty_dirs(root: &Path, ignore_names: &HashSet<String>) {
-    for entry in WalkDir::new(root).contents_first(true).into_iter().flatten() {
+    for entry in WalkDir::new(root)
+        .contents_first(true)
+        .into_iter()
+        .flatten()
+    {
         let p = entry.path();
         if p == root || !p.is_dir() {
             continue;
@@ -492,7 +501,10 @@ mod tests {
             .collect();
 
         assert!(is_ignored(Path::new(".DS_Store"), &ignore_names));
-        assert!(is_ignored(Path::new("book/@eaDir/cover.jpg"), &ignore_names));
+        assert!(is_ignored(
+            Path::new("book/@eaDir/cover.jpg"),
+            &ignore_names
+        ));
         assert!(is_ignored(Path::new("sub/~$temp.txt"), &ignore_names));
         assert!(is_ignored(Path::new(".hidden/file.txt"), &ignore_names));
         assert!(!is_ignored(Path::new("novel/chapter1.txt"), &ignore_names));
@@ -530,8 +542,7 @@ mod tests {
             let mut zw = ZipWriter::new(&mut src_buf);
             let deflated =
                 SimpleFileOptions::default().compression_method(CompressionMethod::Deflated);
-            let stored =
-                SimpleFileOptions::default().compression_method(CompressionMethod::Stored);
+            let stored = SimpleFileOptions::default().compression_method(CompressionMethod::Stored);
 
             zw.start_file("OEBPS/content.opf", deflated).unwrap();
             let opf_xml = "<package><metadata><dc:title>软件测试指南</dc:title><dc:language>zh-CN</dc:language></metadata></package>";
