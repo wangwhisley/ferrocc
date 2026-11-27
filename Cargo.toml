@@ -7,7 +7,7 @@ license = "Apache-2.0"
 [dependencies]
 ferrous-opencc = "0.4"
 serde = { version = "1", features = ["derive"] }
-toml = "0.8"
+toml = "1.2"
 walkdir = "2"
 zip = { version = "2", default-features = false, features = ["deflate"] }
 chardetng = "0.1"
