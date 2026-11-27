@@ -1,0 +1,20 @@
+# OpenCC 轉換模式：s2twp.json / s2tw.json / s2t.json / tw2sp.json / t2s.json
+opencc_config = "s2twp.json"
+
+# 檔名與子資料夾名稱是否一併轉換
+convert_filename = true
+
+# 轉換完成後是否保留原檔到 /done（false 則直接刪除原檔）
+keep_original = true
+
+# 每幾秒掃描一次 /input
+poll_interval = 3
+
+# 支援轉換的純文字副檔名（.epub 會固定自動處理）
+text_extensions = [
+  ".txt", ".srt", ".ass", ".ssa", ".vtt", ".sub",
+  ".md", ".lrc", ".csv", ".xml", ".html", ".htm", ".json"
+]
+
+# 忽略的系統檔或資料夾
+ignore_names = [".DS_Store", "Thumbs.db", "@eaDir"]

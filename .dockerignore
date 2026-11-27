@@ -1,0 +1,11 @@
+.git
+.github
+target
+input
+output
+done
+failed
+config
+docker-compose.yml
+README.md
+.DS_Store

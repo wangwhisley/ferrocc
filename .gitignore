@@ -1,0 +1,11 @@
+/target
+/input/*
+/output/*
+/done/*
+/failed/*
+config/config.toml
+.DS_Store
+Thumbs.db
+@eaDir
+.vscode/
+.idea/

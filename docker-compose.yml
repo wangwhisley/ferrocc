@@ -1,0 +1,28 @@
+services:
+  ferrocc:
+    image: ghcr.io/<你的github帳號>/ferrocc:latest # 帳號請全部小寫
+    container_name: ferrocc
+    restart: unless-stopped
+    user: "1026:100"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    environment:
+      - TZ=Asia/Taipei
+    volumes:
+      - ./config:/config
+      - ./input:/input
+      - ./output:/output
+      - ./done:/done
+      - ./failed:/failed
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: ferrocc-watchtower
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Taipei
+      - WATCHTOWER_LABEL_ENABLE=true
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=86400
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
